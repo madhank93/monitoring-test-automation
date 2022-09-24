@@ -1,0 +1,15 @@
+# Node artifact files
+node_modules/
+dist/
+
+# Infra related files
+infra/
+
+# VS code settings
+.vscode/
+
+# Log files
+*.log
+
+# github yml files
+.github/
