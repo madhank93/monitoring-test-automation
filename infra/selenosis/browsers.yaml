@@ -1,0 +1,35 @@
+chrome:
+  defaultVersion: "91.0"
+  path: "/"
+  spec:
+    env:
+      - name: TZ
+        value: Asia/Kolkata
+      - name: ENABLE_VNC
+        value: "false"
+  kernelCaps:
+    - SYS_ADMIN
+  versions:
+    "91.0":
+      image: "selenoid/chrome:91.0"
+firefox:
+  defaultVersion: "88.0"
+  path: "/wd/hub"
+  spec:
+    resources:
+      requests:
+        memory: 500Mi
+        cpu: "0.5"
+      limits:
+        memory: 2Gi
+        cpu: "1"
+    env:
+      - name: TZ
+        value: Asia/Kolkata
+      - name: ENABLE_VNC
+        value: "false"
+  kernelCaps:
+    - SYS_ADMIN
+  versions:
+    "88.0":
+      image: "selenoid/firefox:88.0"

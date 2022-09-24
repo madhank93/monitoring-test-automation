@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pre-pull-browser-images
+spec:
+  ttlSecondsAfterFinished: 10
+  parallelism: 2
+  template:
+    spec:
+      containers:
+        - name: chrome-image
+          imagePullPolicy: IfNotPresent
+          image: docker
+          command:
+            - docker
+            - pull
+            - selenoid/chrome:91.0
+          volumeMounts:
+            - name: docker
+              mountPath: /var/run
+        - name: firefox-image
+          imagePullPolicy: IfNotPresent
+          image: docker
+          command:
+            - docker
+            - pull
+            - selenoid/firefox:88.0
+          volumeMounts:
+            - name: docker
+              mountPath: /var/run
+      volumes:
+        - name: docker
+          hostPath:
+            path: /var/run
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 0
