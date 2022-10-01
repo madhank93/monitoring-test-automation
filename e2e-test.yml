@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: e2e
+  namespace: selenosis
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        selenosis.app.type: worker
+    spec:
+      containers:
+        - name: e2e
+          imagePullPolicy: IfNotPresent
+          image: madhank93/selenium-monitor:0.1
+          resources:
+            limits:
+              cpu: "3"
+              memory: "4Gi"
+            requests:
+              cpu: "1"
+              memory: "1Gi"
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 0
