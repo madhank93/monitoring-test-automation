@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: prom-svc-monitor
+  name: telegraf-svc-monitor
+  namespace: default
+spec:
+  endpoints:
+    - path: /metrics
+      port: http-port
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      app: telegraf-svc

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: selenosis
+  name: telegraf-config
+  labels:
+    app: monitoring
+    selenosis.app.type: worker
+data:
+  telegraf.conf: |+
+    [[outputs.prometheus_client]]
+      path = "/metrics"
+      listen = ":9273"
+    [[outputs.file]]
+      files = ["stdout"]
+      data_format = "prometheus"
+    # Selenoid Server
+    [[inputs.http]]
+      urls = [ "http://selenosis:4444/status"]
+      data_format = "json"

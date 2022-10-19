@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: selenosis
+  namespace: selenosis
+spec:
+  strategy: # deployment strategy used to replace existing pods with new one
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  replicas: 2
+  selector:
+    matchLabels:
+      app: selenosis
+  template:
+    metadata:
+      labels:
+        app: selenosis
+        selenosis.app.type: worker
+      namespace: selenosis
+    spec:
+      containers:
+        - args: [
+              "/selenosis",
+              "--browsers-config",
+              "./config/browsers.yaml",
+              "--namespace",
+              "selenosis",
+              "--service-name",
+              "seleniferous",
+              "--browser-limit",
+              "50", # this specifies max number of browser allowed
+              "--browser-wait-timeout",
+              "3m30s",
+              "--session-wait-timeout",
+              "3m30s",
+              "--proxy-image",
+              "alcounit/seleniferous:v1.0.2",
+            ]
+          image: alcounit/selenosis:v1.0.5
+          name: selenosis
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+            requests:
+              cpu: "0.2"
+              memory: "128Mi"
+          ports:
+            - containerPort: 4444
+              name: selenium
+              protocol: TCP
+          volumeMounts:
+            - mountPath: ./config
+              name: browsers-config
+          imagePullPolicy: IfNotPresent
+          readinessProbe: # kubelet uses readiness probes to know when a container is ready to start accepting traffic
+            httpGet:
+              path: /healthz
+              port: 4444
+            periodSeconds: 2
+            initialDelaySeconds: 30
+          livenessProbe: # kubelet uses liveness probes to check if app is live
+            httpGet:
+              path: /healthz
+              port: 4444
+            periodSeconds: 2
+            initialDelaySeconds: 3
+      volumes:
+        - name: browsers-config
+          configMap:
+            name: selenosis-config

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: telegraf
+  namespace: selenosis
+  labels:
+    selenosis.app.type: worker
+    app: telegraf-svc
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+    - name: http-port
+      port: 9273
+  selector:
+    app: telegraf
+  type: NodePort
