@@ -30,11 +30,11 @@ spec:
               "--service-name",
               "seleniferous",
               "--browser-limit",
-              "50", # this specifies max number of browser allowed
+              "10", # this specifies max number of browser allowed
               "--browser-wait-timeout",
-              "3m30s",
+              "1m30s",
               "--session-wait-timeout",
-              "3m30s",
+              "1m30s",
               "--proxy-image",
               "alcounit/seleniferous:v1.0.2",
             ]
